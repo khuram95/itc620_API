@@ -1,0 +1,7 @@
+Flask==2.3.2
+Flask-SQLAlchemy==3.0.5
+pymysql==1.0.2
+flask-cors==4.0.0
+httpx==0.24.1
+beautifulsoup4==4.12.2
+requests
