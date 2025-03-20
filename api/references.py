@@ -4,11 +4,28 @@ from db import db, Reference
 
 references_bp = Blueprint('references', __name__)
 
-@references_bp.route('/', methods=['GET'])
-def get_references():
-    references = Reference.query.all()
-    return jsonify([{'reference_id': r.reference_id, 'title': r.title, 'url': r.url} for r in references])
-
+@references_bp.route('/', defaults={'reference_id': None}, methods=['GET'])
+@references_bp.route('/<int:reference_id>', methods=['GET'])
+def get_references(reference_id):
+    if reference_id:
+        reference = Reference.query.get(reference_id)
+        if reference:
+            return jsonify({
+                'reference_id': reference.reference_id,
+                'title': reference.title,
+                'url': reference.url
+            })
+        else:
+            return jsonify({'error': 'Reference not found'}), 404
+    else:
+        references = Reference.query.all()
+        return jsonify([
+            {
+                'reference_id': r.reference_id,
+                'title': r.title,
+                'url': r.url
+            } for r in references
+        ])
 @references_bp.route('/', methods=['POST'])
 def create_reference():
     data = request.json

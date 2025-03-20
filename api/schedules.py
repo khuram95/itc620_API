@@ -4,10 +4,28 @@ from db import db, Schedules
 
 schedules_bp = Blueprint('schedules', __name__)
 
-@schedules_bp.route('/', methods=['GET'])
-def get_schedules():
-    schedules = Schedules.query.all()
-    return jsonify([{'ScheduleID': s.ScheduleID, 'ScheduleName': s.ScheduleName, 'Description': s.Description} for s in schedules])
+@schedules_bp.route('/', defaults={'schedule_id': None}, methods=['GET'])
+@schedules_bp.route('/<int:schedule_id>', methods=['GET'])
+def get_schedules(schedule_id):
+    if schedule_id:
+        schedule = Schedules.query.get(schedule_id)
+        if schedule:
+            return jsonify({
+                'ScheduleID': schedule.ScheduleID,
+                'ScheduleName': schedule.ScheduleName,
+                'Description': schedule.Description
+            })
+        else:
+            return jsonify({'error': 'Schedule not found'}), 404
+    else:
+        schedules = Schedules.query.all()
+        return jsonify([
+            {
+                'ScheduleID': s.ScheduleID,
+                'ScheduleName': s.ScheduleName,
+                'Description': s.Description
+            } for s in schedules
+        ])
 
 @schedules_bp.route('/', methods=['POST'])
 def create_schedule():

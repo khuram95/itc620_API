@@ -4,11 +4,28 @@ from db import db, Allergy
 
 allergies_bp = Blueprint('allergies', __name__)
 
-@allergies_bp.route('/', methods=['GET'])
-def get_allergies():
-    allergies = Allergy.query.all()
-    return jsonify([{'allergy_id': a.allergy_id, 'name': a.name, 'description': a.description} for a in allergies])
-
+@allergies_bp.route('/', defaults={'allergy_id': None}, methods=['GET'])
+@allergies_bp.route('/<int:allergy_id>', methods=['GET'])
+def get_allergies(allergy_id):
+    if allergy_id:
+        allergy = Allergy.query.get(allergy_id)
+        if allergy:
+            return jsonify({
+                'allergy_id': allergy.allergy_id,
+                'name': allergy.name,
+                'description': allergy.description
+            })
+        else:
+            return jsonify({'error': 'Allergy not found'}), 404
+    else:
+        allergies = Allergy.query.all()
+        return jsonify([
+            {
+                'allergy_id': a.allergy_id,
+                'name': a.name,
+                'description': a.description
+            } for a in allergies
+        ])
 @allergies_bp.route('/', methods=['POST'])
 def create_allergy():
     data = request.json

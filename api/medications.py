@@ -4,22 +4,40 @@ from db import db, Medication
 import pdb
 medications_bp = Blueprint('medications', __name__)
 
-@medications_bp.route('/', methods=['GET'])
-def get_medications():
-    medications = Medication.query.all()
-    # pdb.set_trace()
-    return jsonify([{
-        'medication_id': m.medication_id,
-        'name': m.name,
-        'description': m.description,
-        'indications': m.indications,
-        'counselling': m.counselling,
-        'adverse_effect': m.adverse_effect,
-        'practice_points': m.practice_points,
-        'created_at': m.created_at.isoformat() if m.created_at else None,
-        'updated_at': m.updated_at.isoformat() if m.updated_at else None
-    } for m in medications])
-    # return jsonify([{'medication_id': m.medication_id, 'name': m.name, 'description': m.description} for m in medications])
+@medications_bp.route('/', defaults={'medication_id': None}, methods=['GET'])
+@medications_bp.route('/<int:medication_id>', methods=['GET'])
+def get_medications(medication_id):
+    if medication_id:
+        medication = Medication.query.get(medication_id)
+        if medication:
+            return jsonify({
+                'medication_id': medication.medication_id,
+                'name': medication.name,
+                'description': medication.description,
+                'indications': medication.indications,
+                'counselling': medication.counselling,
+                'adverse_effect': medication.adverse_effect,
+                'practice_points': medication.practice_points,
+                'created_at': medication.created_at.isoformat() if medication.created_at else None,
+                'updated_at': medication.updated_at.isoformat() if medication.updated_at else None
+            })
+        else:
+            return jsonify({'error': 'Medication not found'}), 404
+    else:
+        medications = Medication.query.all()
+        return jsonify([
+            {
+                'medication_id': m.medication_id,
+                'name': m.name,
+                'description': m.description,
+                'indications': m.indications,
+                'counselling': m.counselling,
+                'adverse_effect': m.adverse_effect,
+                'practice_points': m.practice_points,
+                'created_at': m.created_at.isoformat() if m.created_at else None,
+                'updated_at': m.updated_at.isoformat() if m.updated_at else None
+            } for m in medications
+        ])
 
 @medications_bp.route('/', methods=['POST'])
 def create_medication():

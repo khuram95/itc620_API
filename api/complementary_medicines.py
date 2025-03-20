@@ -4,15 +4,30 @@ from db import db, ComplementaryMedicine
 
 complementary_medicines_bp = Blueprint('complementary_medicines', __name__)
 
-@complementary_medicines_bp.route('/', methods=['GET'])
-def get_complementary_medicines():
-    complementary_medicines = ComplementaryMedicine.query.all()
-    return jsonify([{
-        'compl_med_id': cm.compl_med_id,
-        'name': cm.name,
-        'description': cm.description
-    } for cm in complementary_medicines])
-
+@complementary_medicines_bp.route('/', defaults={'compl_med_id': None}, methods=['GET'])
+@complementary_medicines_bp.route('/<int:compl_med_id>', methods=['GET'])
+def get_complementary_medicines(compl_med_id):
+    if compl_med_id:
+        complementary_medicine = ComplementaryMedicine.query.get(compl_med_id)
+        if complementary_medicine:
+            return jsonify({
+                'compl_med_id': complementary_medicine.compl_med_id,
+                'name': complementary_medicine.name,
+                'description': complementary_medicine.description
+            })
+        else:
+            return jsonify({'error': 'Complementary medicine not found'}), 404
+    else:
+        complementary_medicines = ComplementaryMedicine.query.all()
+        return jsonify([
+            {
+                'compl_med_id': cm.compl_med_id,
+                'name': cm.name,
+                'description': cm.description
+            } for cm in complementary_medicines
+        ])
+    
+    
 @complementary_medicines_bp.route('/', methods=['POST'])
 def create_complementary_medicine():
     data = request.json

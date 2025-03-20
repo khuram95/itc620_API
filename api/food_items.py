@@ -4,11 +4,30 @@ from db import db, FoodItem
 
 food_items_bp = Blueprint('food_items', __name__)
 
-@food_items_bp.route('/', methods=['GET'])
-def get_food_items():
-    food_items = FoodItem.query.all()
-    return jsonify([{'food_id': f.food_id, 'name': f.name, 'description': f.description} for f in food_items])
 
+
+@food_items_bp.route('/', defaults={'food_id': None}, methods=['GET'])
+@food_items_bp.route('/<int:food_id>', methods=['GET'])
+def get_food_items(food_id):
+    if food_id:
+        food_item = FoodItem.query.get(food_id)
+        if food_item:
+            return jsonify({
+                'food_id': food_item.food_id,
+                'name': food_item.name,
+                'description': food_item.description
+            })
+        else:
+            return jsonify({'error': 'Food item not found'}), 404
+    else:
+        food_items = FoodItem.query.all()
+        return jsonify([
+            {
+                'food_id': f.food_id,
+                'name': f.name,
+                'description': f.description
+            } for f in food_items
+        ])
 @food_items_bp.route('/', methods=['POST'])
 def create_food_item():
     data = request.json
