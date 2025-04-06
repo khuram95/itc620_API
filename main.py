@@ -15,7 +15,7 @@ CORS(
     resources={
         r"/api/*": {
             "origins": [
-                "http://localhost:3001",
+                "http://localhost:3000",
                 "https://projectitc620.vercel.app",
                 "https://kzml8u6k78vedta1r0p0.lite.vusercontent.net",
                 "https://kzmp10ggke8jnyfvk8qt.lite.vusercontent.net",

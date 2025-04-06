@@ -1,5 +1,6 @@
 # api/__init__.py
 from flask import Blueprint
+from .dashboard import dashboard_bp
 from .allergies import allergies_bp
 from .medications import medications_bp
 from .interactions import interactions_bp
@@ -13,6 +14,7 @@ from .login import login_bp
 
 api_bp = Blueprint('api', __name__)
 
+api_bp.register_blueprint(dashboard_bp, url_prefix='/dashboard')
 api_bp.register_blueprint(allergies_bp, url_prefix='/allergies')
 api_bp.register_blueprint(medications_bp, url_prefix='/medications')
 api_bp.register_blueprint(interactions_bp, url_prefix='/interactions')
