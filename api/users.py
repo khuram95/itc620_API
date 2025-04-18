@@ -15,7 +15,8 @@ def get_users(user_id):
                 'user_id': user.user_id,
                 'is_admin': user.is_admin,
                 'email': user.email,
-                'full_name': user.full_name
+                'full_name': user.full_name,
+                'created_at': user.created_at,
             })
         else:
             return jsonify({'error': 'User not found'}), 404
@@ -26,7 +27,8 @@ def get_users(user_id):
                 'user_id': u.user_id,
                 'is_admin': u.is_admin,
                 'email': u.email,
-                'full_name': u.full_name
+                'full_name': u.full_name,
+                'created_at': u.created_at,
             } for u in users
         ])
 

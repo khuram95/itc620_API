@@ -23,7 +23,9 @@ def get_complementary_medicines(compl_med_id):
             {
                 'compl_med_id': cm.compl_med_id,
                 'name': cm.name,
-                'description': cm.description
+                'description': cm.description,
+                'created_at': cm.created_at,
+                'updated_at': cm.updated_at
             } for cm in complementary_medicines
         ])
     

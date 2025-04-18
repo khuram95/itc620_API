@@ -15,7 +15,9 @@ def get_food_items(food_id):
             return jsonify({
                 'food_id': food_item.food_id,
                 'name': food_item.name,
-                'description': food_item.description
+                'description': food_item.description,
+                'created_at': food_item.created_at,
+                'updated_at': food_item.updated_at
             })
         else:
             return jsonify({'error': 'Food item not found'}), 404
@@ -25,7 +27,9 @@ def get_food_items(food_id):
             {
                 'food_id': f.food_id,
                 'name': f.name,
-                'description': f.description
+                'description': f.description,
+                'created_at': f.created_at,
+                'updated_at': f.updated_at
             } for f in food_items
         ])
 @food_items_bp.route('/', methods=['POST'])

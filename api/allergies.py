@@ -13,7 +13,9 @@ def get_allergies(allergy_id):
             return jsonify({
                 'allergy_id': allergy.allergy_id,
                 'name': allergy.name,
-                'description': allergy.description
+                'description': allergy.description,
+                'created_at': allergy.created_at,
+                'updated_at': allergy.updated_at
             })
         else:
             return jsonify({'error': 'Allergy not found'}), 404
@@ -23,7 +25,9 @@ def get_allergies(allergy_id):
             {
                 'allergy_id': a.allergy_id,
                 'name': a.name,
-                'description': a.description
+                'description': a.description,
+                'created_at': a.created_at,
+                'updated_at': a.updated_at
             } for a in allergies
         ])
 @allergies_bp.route('/', methods=['POST'])

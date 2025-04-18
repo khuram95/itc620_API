@@ -13,7 +13,10 @@ def get_references(reference_id):
             return jsonify({
                 'reference_id': reference.reference_id,
                 'title': reference.title,
-                'url': reference.url
+                'url': reference.url,
+                'source_type': reference.source_type,
+                'created_at': reference.created_at,
+                'updated_at': reference.updated_at
             })
         else:
             return jsonify({'error': 'Reference not found'}), 404
@@ -23,7 +26,10 @@ def get_references(reference_id):
             {
                 'reference_id': r.reference_id,
                 'title': r.title,
-                'url': r.url
+                'url': r.url,
+                'source_type': r.source_type,
+                'created_at': r.created_at,
+                'updated_at': r.updated_at
             } for r in references
         ])
 @references_bp.route('/', methods=['POST'])
