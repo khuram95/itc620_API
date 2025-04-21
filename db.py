@@ -76,8 +76,13 @@ class MedicationReference(db.Model):
 
 class MedicationSchedule(db.Model):
     __tablename__ = 'MedicationSchedule'
-    medication_id = db.Column(db.Integer, db.ForeignKey('medication.medication_id'), primary_key=True)
-    schedule_id = db.Column(db.Integer, db.ForeignKey('schedules.ScheduleID'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    medication_id = db.Column(db.Integer, db.ForeignKey('medication.medication_id'))
+    schedule_id = db.Column(db.Integer, db.ForeignKey('schedules.ScheduleID'))
+
+    # Relationship definitions
+    medication = db.relationship('Medication', back_populates='medication_schedules')
+    schedule = db.relationship('Schedules', back_populates='medication_schedules')
 
 class Reference(db.Model):
     __tablename__ = 'Reference'
@@ -106,6 +111,8 @@ class Medication(db.Model):
     counselling = db.Column(db.Text)
     adverse_effect = db.Column(db.Text)
     practice_points = db.Column(db.Text)
+     # Add a relationship to MedicationSchedule
+    medication_schedules = db.relationship('MedicationSchedule', back_populates='medication')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
@@ -113,4 +120,6 @@ class Schedules(db.Model):
     __tablename__ = 'schedules'
     ScheduleID = db.Column(db.Integer, primary_key=True)
     ScheduleName = db.Column(db.String(50), nullable=False)
+     # Add a relationship to MedicationSchedule
+    medication_schedules = db.relationship('MedicationSchedule', back_populates='schedule')
     Description = db.Column(db.Text)
