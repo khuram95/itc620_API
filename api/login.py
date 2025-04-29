@@ -39,6 +39,8 @@ def login():
         'message': 'Login successful',
         'token': token,
         'user': {
+        'is_admin': user.is_admin,
+
             'full_name': user.full_name,
             'user_id': user.user_id,
             'email': user.email
