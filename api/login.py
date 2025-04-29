@@ -26,7 +26,8 @@ def login():
     # Create a JWT token with an expiration time of 30 minutes
     token_payload = {
         'user_id': user.user_id,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
+        'is_admin': user.is_admin
     }
     token = jwt.encode(
         token_payload,
