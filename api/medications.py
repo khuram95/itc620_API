@@ -1,6 +1,6 @@
 # api/medications.py
 from flask import Blueprint, request, jsonify
-from db import db, Medication, MedicationSchedule
+from db import db, Medication, MedicationSchedule, Reference
 import pdb
 from sqlalchemy.orm import joinedload
 
@@ -16,6 +16,7 @@ def get_medications(medication_id):
                 'medication_id': medication.medication_id,
                 'name': medication.name,
                 'description': medication.description,
+                'reference_url': [ref.url for ref in medication.reference],
                 'indications': medication.indications,
                 'counselling': medication.counselling,
                 'adverse_effect': medication.adverse_effect,
@@ -29,13 +30,16 @@ def get_medications(medication_id):
     else:
         # medications = Medication.query.all()
         medications = Medication.query.options(
-                        joinedload(Medication.medication_schedules).joinedload(MedicationSchedule.schedule)
+                        joinedload(Medication.medication_schedules).joinedload(MedicationSchedule.schedule),
+                        joinedload(Medication.reference)
                     ).all()
+
         return jsonify([
             {
                 'medication_id': m.medication_id,
                 'name': m.name,
                 'description': m.description,
+                'reference_url': [ref.url for ref in m.reference],
                 'indications': m.indications,
                 'counselling': m.counselling,
                 'adverse_effect': m.adverse_effect,

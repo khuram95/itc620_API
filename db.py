@@ -87,9 +87,11 @@ class MedicationSchedule(db.Model):
 class Reference(db.Model):
     __tablename__ = 'Reference'
     reference_id = db.Column(db.Integer, primary_key=True)
+    medication_id = db.Column(db.Integer, db.ForeignKey('medication.medication_id'), nullable=False)
     title = db.Column(db.String(255))
     url = db.Column(db.Text)
     source_type = db.Column(db.String(100))
+    medication = db.relationship('Medication', back_populates='reference')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
@@ -113,6 +115,7 @@ class Medication(db.Model):
     practice_points = db.Column(db.Text)
      # Add a relationship to MedicationSchedule
     medication_schedules = db.relationship('MedicationSchedule', back_populates='medication')
+    reference = db.relationship('Reference', back_populates='medication')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
