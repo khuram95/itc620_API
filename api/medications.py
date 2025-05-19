@@ -22,6 +22,7 @@ def get_medications(medication_id):
                 'adverse_effect': medication.adverse_effect,
                 'practice_points': medication.practice_points,
                 'schedules': [link.schedule.ScheduleID for link in medication.medication_schedules],
+                'allergies': [link.allergy.description for link in medication.medication_allergy],
                 'created_at': medication.created_at.isoformat() if medication.created_at else None,
                 'updated_at': medication.updated_at.isoformat() if medication.updated_at else None
             })
@@ -45,6 +46,7 @@ def get_medications(medication_id):
                 'adverse_effect': m.adverse_effect,
                 'practice_points': m.practice_points,
                 'schedules': [link.schedule.ScheduleID for link in m.medication_schedules],
+                'allergies': [link.allergy.description for link in medication.medication_allergy],
                 'created_at': m.created_at.isoformat() if m.created_at else None,
                 'updated_at': m.updated_at.isoformat() if m.updated_at else None
             } for m in medications

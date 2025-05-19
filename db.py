@@ -9,6 +9,7 @@ class Allergy(db.Model):
     allergy_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
+    medication_allergy = db.relationship('MedicationAllergy', back_populates='allergy')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
@@ -68,6 +69,10 @@ class MedicationAllergy(db.Model):
     allergy_id = db.Column(db.Integer, db.ForeignKey('Allergy.allergy_id'), nullable=False)
     notes = db.Column(db.Text)
 
+    # Relationship definitions
+    medication = db.relationship('Medication', back_populates='medication_allergy')
+    allergy = db.relationship('Allergy', back_populates='medication_allergy')
+
 class MedicationReference(db.Model):
     __tablename__ = 'MedicationReference'
     med_ref_id = db.Column(db.Integer, primary_key=True)
@@ -116,6 +121,7 @@ class Medication(db.Model):
      # Add a relationship to MedicationSchedule
     medication_schedules = db.relationship('MedicationSchedule', back_populates='medication')
     reference = db.relationship('Reference', back_populates='medication')
+    medication_allergy = db.relationship('MedicationAllergy', back_populates='medication')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
