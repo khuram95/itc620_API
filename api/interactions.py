@@ -30,8 +30,8 @@ def get_drug_drug_interactions(interaction_id):
         DrugDrugInteraction.severity,
         DrugDrugInteraction.description,
         DrugDrugInteraction.recommendation,
-        # DrugDrugInteraction.created_at, # Uncomment if needed
-        # DrugDrugInteraction.updated_at, # Uncomment if needed
+        DrugDrugInteraction.created_at, # Uncomment if needed
+        DrugDrugInteraction.updated_at, # Uncomment if needed
         med1.name.label('medication1_name'),
         med2.name.label('medication2_name')
     ).join(med1, med1.medication_id == DrugDrugInteraction.medication1_id) \
@@ -49,7 +49,9 @@ def get_drug_drug_interactions(interaction_id):
             'medication2_name': interaction.medication2_name,
             'severity': interaction.severity,
             'description': interaction.description,
-            'recommendation': interaction.recommendation
+            'recommendation': interaction.recommendation,
+            'created_at': interaction.created_at,
+            'updated_at': interaction.updated_at
             # Add timestamps if needed
         }
         return jsonify(result)
@@ -63,7 +65,9 @@ def get_drug_drug_interactions(interaction_id):
             'medication2_name': ddi.medication2_name,
             'severity': ddi.severity,
             'description': ddi.description,
-            'recommendation': ddi.recommendation
+            'recommendation': ddi.recommendation,
+            'created_at': ddi.created_at,
+            'updated_at': ddi.updated_at
             # Add timestamps if needed
         } for ddi in interactions]
         return jsonify(result)
@@ -197,7 +201,9 @@ def get_drug_complementary_interactions(interaction_id):
             'complementary_medicine_name': compl_med_name,
             'severity': i.severity,
             'description': i.description,
-            'recommendation': i.recommendation
+            'recommendation': i.recommendation,
+            'created_at': i.created_at,
+            'updated_at': i.updated_at
         }
         return jsonify(response)
     else:
@@ -210,7 +216,9 @@ def get_drug_complementary_interactions(interaction_id):
             'complementary_medicine_name': compl_med_name,
             'severity': i.severity,
             'description': i.description,
-            'recommendation': i.recommendation
+            'recommendation': i.recommendation,
+            'created_at': i.created_at,
+            'updated_at': i.updated_at
         } for i, med_name, compl_med_name in interactions]
         return jsonify(result)
 
@@ -331,7 +339,9 @@ def get_drug_food_interactions(interaction_id):
             'food_name': food_name,
             'severity': i.severity,
             'description': i.description,
-            'recommendation': i.recommendation
+            'recommendation': i.recommendation,
+            'created_at': i.created_at,
+            'updated_at': i.updated_at
         }
         return jsonify(response)
     else:
@@ -344,7 +354,9 @@ def get_drug_food_interactions(interaction_id):
             'food_name': food_name,
             'severity': i.severity,
             'description': i.description,
-            'recommendation': i.recommendation
+            'recommendation': i.recommendation,
+            'created_at': i.created_at,
+            'updated_at': i.updated_at
         } for i, med_name, food_name in interactions]
         return jsonify(result)
 
